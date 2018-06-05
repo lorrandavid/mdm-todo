@@ -1,3 +1,25 @@
+/**
+ * Helpers
+ */
+var Helpers = {
+    validation: {
+        rules: {
+            required: function(data) {
+                return data.length > 0 && data !== ' ';
+            },
+            min: function(data, length) {
+                return data.length > length;
+            },
+            max: function(data, length) {
+                return data.length < length;
+            },
+            type: function(data, type) {
+                return typeof data === type;
+            }
+        }
+    }
+};
+
 // TODO
 function createList(UI) {
     var todos = {};
@@ -116,10 +138,8 @@ function createUI() {
      * Get form data
      */
     function getFormData() {
-        return {
-            title: $inputTitle.value,
-            description: $inputDescription.value
-        };
+        var title = $inputTitle.value;
+        var description = $inpuinputDescriptiontTitle.value;
     }
 
     /**
