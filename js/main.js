@@ -7,8 +7,8 @@ function createList(UI) {
      * @param {*} data
      */
     function add(data) {
-        var id = btoa('titulo do post');
-        var todo = { id: id, description: data.description, status: 00 };
+        var id = btoa(data.title);
+        var todo = { id: id, title: data.title, description: data.description, status: 00 };
         todos[id] = todo;
         UI.addToList(id, todo);
     }
@@ -62,12 +62,6 @@ function createList(UI) {
 
 // UI
 function createUI() {
-    var TEMPLATE = `
-        <h2>Lorem Ipsum1</h2>
-        <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ut quidem ratione hic nam libero asperiores inventore pariatur unde quisquam aliquam! Eligendi ad vel hic minima et quas repellendus ex! Iste?</p>
-        <input type="checkbox" name="done" data-js-action="done" value="11"><label for="done">Finalizar</label>
-        <a href="#" data-js-action="remove">Remover</a>
-    `;
     var $todoElements = [];
     var $todosContainer = document.querySelector('#todos');
     var $btnAddNew = document.querySelector('[data-js-action="addNewTodo"]');
@@ -80,7 +74,7 @@ function createUI() {
      */
     function handleNewTodo(e) {
         e.preventDefault();
-        App.add({});
+        App.add(getFormData());
     }
 
     /**
@@ -112,11 +106,21 @@ function createUI() {
     function addToList(id, data) {
         var fragment = document.createDocumentFragment();
         var wrapper = document.createElement('div');
-        wrapper.classList.add = 'todo';
-        wrapper.setAttribute('data-js-id', '123');
-        wrapper.innerHTML = render({ title: 'Novo', description: 'Desc' });
+        wrapper.classList.add('todo');
+        wrapper.setAttribute('data-js-id', id);
+        wrapper.innerHTML = render({ title: data.title, description: data.description });
         $todosContainer.appendChild(fragment.appendChild(wrapper));
     };
+
+    /**
+     * Get form data
+     */
+    function getFormData() {
+        return {
+            title: $inputTitle.value,
+            description: $inputDescription.value
+        };
+    }
 
     /**
      * Public API
