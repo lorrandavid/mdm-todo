@@ -56,17 +56,20 @@ function createList(UI) {
         if(todos[id] === undefined) {
             return false;
         }
-
         delete todos[id];
         return true;
     }
 
     /**
      * Mark todo as done/not done
+     * @param {*} id
      * @param {*} status
      */
-    function mark(status) {
-
+    function mark(id, status) {
+        if(todos[id] === undefined) {
+            return false;
+        }
+        todos[id].status = status;
     }
 
     /**
@@ -95,7 +98,6 @@ function createList(UI) {
 // UI
 function createUI() {
     var $todoElements = [];
-    var $doneElements = [];
     var $todosContainer = document.querySelector('#todos');
     var $btnAddNew = document.querySelector('[data-js-action="addNewTodo"]');
     var $inputTitle = document.querySelector('[data-js-id="title"]');
@@ -129,16 +131,15 @@ function createUI() {
 
     function handleDoneTodo(e) {
         var $checkbox = e.target;
+        var id = $checkbox.parentNode.getAttribute('data-js-id');
 
         if ($checkbox.checked) {
-            // Must send to $doneElements
-            // Change status to 11
+            $checkbox.parentNode.classList.add('todo--done');
+            App.mark(id, '11');
         } else {
-            // Must send to $todoElements
-            // Change status to 00
+            $checkbox.parentNode.classList.remove('todo--done');
+            App.mark(id, '00');
         }
-
-        renderAll();
     }
 
     /**
