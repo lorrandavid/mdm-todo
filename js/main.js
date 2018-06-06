@@ -53,7 +53,12 @@ function createList(UI) {
      * @param {*} id
      */
     function remove(id) {
-        console.log(id);
+        if(todos[id] === undefined) {
+            return false;
+        }
+
+        delete todos[id];
+        return true;
     }
 
     /**
@@ -112,7 +117,13 @@ function createUI() {
         e.preventDefault();
         var todo = e.target.parentNode;
         var id = todo.getAttribute('data-js-id');
-        App.remove(id);
+
+        if(App.remove(id)) {
+            $todoElements = $todoElements.filter(function(todo) {
+                return todo.getAttribute('data-js-id') !== id;
+            });
+            renderAll();
+        }
     }
 
     /**
@@ -123,37 +134,52 @@ function createUI() {
     }
 
     /**
-     * Render template
-     * @param {*} data
+     * Render todo
+     * @param {*} id
+     * @param {*} title
+     * @param {*} description
      */
-    function render(data) {
-        var { title, description } = data;
-        return `
+    function render(id, title, description) {
+        var template = `
             <h2>${title}</h2>
             <p>${description}</p>
             <input type="checkbox" name="done" data-js-action="done" value="11"><label for="done">Finalizar</label>
             <a href="#" data-js-action="remove">Remover</a>
         `;
-    }
-
-    /**
-     * Add new todo to the UI
-     * @param {*} id
-     * @param {*} data
-     */
-    function addToList(id, data) {
         var fragment = document.createDocumentFragment();
         var wrapper = document.createElement('div');
         wrapper.classList.add('todo');
         wrapper.setAttribute('data-js-id', id);
-        wrapper.innerHTML = render({ title: data.title, description: data.description });
+        wrapper.innerHTML = template;
         $todosContainer.appendChild(fragment.appendChild(wrapper));
-       
         var $btnRemove = document.querySelector('.todo[data-js-id="' + id + '"] [data-js-action="remove"]');
         $btnRemove.addEventListener('click', handleRemoveTodo);
-        $todoElements.push(wrapper);
-        
-    };
+        return wrapper;
+    }
+
+    /**
+     * Render all todos
+     */
+    function renderAll() {
+        $todosContainer.innerHTML = '';
+
+        $todoElements.forEach(function(todo) {
+            var id = todo.getAttribute('data-js-id');
+            var title = todo.getElementsByTagName('h2')[0].innerText;
+            var description = todo.getElementsByTagName('p')[0].innerText;
+            render(id, title,description);
+        });
+    }
+
+    /**
+     * Add todo to list
+     * @param {*} id
+     * @param {*} data
+     */
+    function addToList(id, data) {
+        var todo = render(id, data.title, data.description);
+        $todoElements.push(todo);
+    }
 
     /**
      * Get form data
@@ -161,7 +187,8 @@ function createUI() {
     function getFormData() {
         var title = $inputTitle.value;
         var description = $inputDescription.value;
-
+        $inputTitle.value = '';
+        $inputDescription.value = '';
         return {title, description };
     }
 
