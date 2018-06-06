@@ -95,6 +95,7 @@ function createList(UI) {
 // UI
 function createUI() {
     var $todoElements = [];
+    var $doneElements = [];
     var $todosContainer = document.querySelector('#todos');
     var $btnAddNew = document.querySelector('[data-js-action="addNewTodo"]');
     var $inputTitle = document.querySelector('[data-js-id="title"]');
@@ -126,6 +127,20 @@ function createUI() {
         }
     }
 
+    function handleDoneTodo(e) {
+        var $checkbox = e.target;
+
+        if ($checkbox.checked) {
+            // Must send to $doneElements
+            // Change status to 11
+        } else {
+            // Must send to $todoElements
+            // Change status to 00
+        }
+
+        renderAll();
+    }
+
     /**
      * Initialize events
      */
@@ -152,8 +167,15 @@ function createUI() {
         wrapper.setAttribute('data-js-id', id);
         wrapper.innerHTML = template;
         $todosContainer.appendChild(fragment.appendChild(wrapper));
-        var $btnRemove = document.querySelector('.todo[data-js-id="' + id + '"] [data-js-action="remove"]');
+
+        /**
+         * Events
+         */
+        var todo = document.querySelector('.todo[data-js-id="' + id + '"]');
+        var $btnRemove = todo.querySelector('[data-js-action="remove"]');
+        var $checkbox = todo.querySelector('[data-js-action="done"]');
         $btnRemove.addEventListener('click', handleRemoveTodo);
+        $checkbox.addEventListener('change', handleDoneTodo);
         return wrapper;
     }
 
