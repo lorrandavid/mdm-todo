@@ -131,13 +131,13 @@ function createUI() {
 
     function handleDoneTodo(e) {
         var $checkbox = e.target;
-        var id = $checkbox.parentNode.getAttribute('data-js-id');
+        var id = $checkbox.parentNode.parentNode.getAttribute('data-js-id');
 
         if ($checkbox.checked) {
-            $checkbox.parentNode.classList.add('todo--done');
+            $checkbox.parentNode.parentNode.classList.add('todo--done');
             App.mark(id, '11');
         } else {
-            $checkbox.parentNode.classList.remove('todo--done');
+            $checkbox.parentNode.parentNode.classList.remove('todo--done');
             App.mark(id, '00');
         }
     }
@@ -157,9 +157,15 @@ function createUI() {
      */
     function render(id, title, description) {
         var template = `
-            <h2>${title}</h2>
-            <p>${description}</p>
-            <input type="checkbox" name="done" data-js-action="done" value="11"><label for="done">Finalizar</label>
+            <div class="todo-cb">
+                <input type="checkbox" class="todo-cb__input" name="done" data-js-action="done" value="11">
+            </div>
+            <div class="todo-info">
+                <h2 class="todo-info__title">${title}</h2>
+                <p class="todo-info__desc">${description}</p>
+            </div>
+            <h2></h2>
+            <p></p>
             <a href="#" data-js-action="remove">Remover</a>
         `;
         var fragment = document.createDocumentFragment();
