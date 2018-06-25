@@ -9,15 +9,32 @@
     <link rel="stylesheet" href="./css/style.css">
 </head>
 <body>
-    <div class="page">
+    <div class="page" id="app">
         <div class="container">
-            <div>
-                <input type="text" data-js-id="title">
+        	<div class="header">
+        		<input type="text" data-js-id="title">
                 <input type="text" data-js-id="description">
+                <select name="priority" data-js-id="priority">
+                	<option value="11" selected>Default</option>
+                	<option value="22">Urgent</option>
+                	<option value="00">Low</option>
+                </select>
                 <a href="#" data-js-action="addNewTodo">Adicionar</a>
-            </div>
+        	</div>
 
-            <div class="todos" id="todos"></div>
+        	<div class="columns">
+        		<div class="column is-one-third" id="todo">
+	        		<h3>Todo</h3>
+	        	</div>
+
+	        	<div class="column is-one-third" id="doing">
+	        		<h3>Doing</h3>
+	        	</div>
+
+	            <div class="column is-one-third" id="done">
+	            	<h3>Done</h3>
+	            </div>
+        	</div>
         </div>
     </div>
 
