@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>MDM Todo List</title>
     <link href="https://fonts.googleapis.com/css?family=Montserrat:700|Roboto:400,500" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.2/dragula.min.css">
     <link rel="stylesheet" href="./css/style.css">
 </head>
 <body>
@@ -24,20 +25,24 @@
 
         	<div class="columns">
         		<div class="column is-one-third" id="todo">
-	        		<h3>Todo</h3>
+	        		<h3 class="column__title">Todo</h3>
+	        		<div class="column__container"></div>
 	        	</div>
 
 	        	<div class="column is-one-third" id="doing">
-	        		<h3>Doing</h3>
+	        		<h3 class="column__title">Doing</h3>
+	        		<div class="column__container"></div>
 	        	</div>
 
 	            <div class="column is-one-third" id="done">
-	            	<h3>Done</h3>
+	            	<h3 class="column__title">Done</h3>
+	        		<div class="column__container"></div>
 	            </div>
         	</div>
         </div>
     </div>
 
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.2/dragula.min.js"></script>
     <script src="./js/main.js"></script>
 </body>
 </html>

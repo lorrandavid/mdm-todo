@@ -1,113 +1,185 @@
 :root {
-  --green: #4BD862;
+	--green: #4BD862;
 }
 
 *,
 *::before,
 *::after {
-  box-sizing: inherit;
+	box-sizing: inherit;
 }
 
 html {
-  box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 body {
-  font-family: 'Roboto', sans-serif;
-  font-weight: 400;
-  font-size: 14px;
-  background-color: #f5f8fd;
+	font-family: 'Roboto', sans-serif;
+	font-weight: 400;
+	font-size: 14px;
+	background-color: #f5f8fd;
 }
 
 .container {
-  width: 100%;
-  max-width: 960px;
-  margin: 0 auto;
+	width: 100%;
+	max-width: 960px;
+	margin: 0 auto;
 }
 
 .page {
-  padding-left: 15px;
-  padding-right: 15px;
+	padding-left: 15px;
+	padding-right: 15px;
 }
 
 .todo {
-  display: flex;
-  align-items: flex-start;
-  justify-content: flex-start;
-  flex-direction: row;
-  border-radius: 6px;
-  background-color: #fff;
-  padding: 8px;
-  border: 1px solid rgba(24, 24, 24, 0.1);
-  box-shadow: 0 1px 3px rgba(24,24,24,0.12), 0 1px 2px rgba(24,24,24,0.24);
-  transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+	display: flex;
+	align-items: flex-start;
+	justify-content: flex-start;
+	flex-direction: row;
+	border-radius: 6px;
+	background-color: #fff;
+	padding: 8px 48px 8px 8px;
+	border: 1px solid rgba(24, 24, 24, 0.1);
+	border-left-width: 3px;
+	border-left-style: solid;
+	box-shadow: 0 1px 3px rgba(24, 24, 24, 0.12), 0 1px 2px rgba(24, 24, 24, 0.24);
+	transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
+	cursor: move;
+	position: relative;
 }
 
 .todo:hover {
-  box-shadow: 0 14px 28px rgba(24,24,24,0.25), 0 10px 10px rgba(24,24,24,0.22);
+	box-shadow: 0 14px 28px rgba(24, 24, 24, 0.25), 0 10px 10px rgba(24, 24, 24, 0.22);
 }
 
 .todo:not(:last-child) {
-  margin-bottom: 16px;
+	margin-bottom: 16px;
+}
+
+.todo--urgent {
+	border-left-color: #dc3545;
+}
+
+.todo--default {
+	border-left-color: #007bff;
+}
+
+.todo--low {
+	border-left-color: #6c757d;
 }
 
 .todo-cb {
-  flex: 0 0 auto;
-  position: relative;
+	display: none;
+	flex: 0 0 auto;
+	position: relative;
 }
 
 .todo-cb::before {
-  width: 16px;
-  height: 16px;
-  content: '';
-  position: relative;
-  top: 0;
-  left: 0;
-  margin-top: 2px;
-  border: 2px solid var(--green);
-  display: block;
-  border-radius: 50%;
+	width: 16px;
+	height: 16px;
+	content: '';
+	position: relative;
+	top: 0;
+	left: 0;
+	margin-top: 2px;
+	border: 2px solid var(--green);
+	display: block;
+	border-radius: 50%;
 }
 
 .todo--done .todo-cb::before {
-  background-color: var(--green);
+	background-color: var(--green);
 }
 
 .todo-cb__input {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 18px;
-  height: 18px;
-  margin: 4px 0 0 0;
-  opacity: 0;
-  cursor: pointer;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 18px;
+	height: 18px;
+	margin: 4px 0 0 0;
+	opacity: 0;
+	cursor: pointer;
 }
 
 .todo-info {
-  flex: 1 1 auto;
-  padding-left: 8px;
+	flex: 1 1 auto;
+	padding-left: 8px;
 }
 
 .todo-info__title {
-  margin: 0;
-  font-size: 16px;
-  font-weight: 500;
-  line-height: 1.45;
+	margin: 0;
+	font-size: 16px;
+	font-weight: 500;
+	line-height: 1.45;
 }
 
 .todo-info__desc {
-  margin: 0;
-  line-height: 1.45;
+	margin: 0;
+	line-height: 1.45;
 }
 
 .todo--done .todo-info__title,
 .todo--done .todo-info__desc {
-  text-decoration: line-through;
+	text-decoration: line-through;
+}
+
+.todo-opts {
+	width: 32px;
+	height: calc(100% - 8px);
+	position: absolute;
+	right: 8px;
+	top: 50%;
+	transform: translateY(-50%);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-between;
+	opacity: 0;
+	margin-right: -4px;
+	transition: margin 0.15s ease-in-out, opacity 0.15s ease-in-out;
+}
+
+.todo:hover .todo-opts {
+	opacity: 1;
+	margin-right: 0;
+}
+
+.todo-opts__btn {
+	display: block;
+	width: 100%;
+	flex: 0 0 auto;
+	height: 33.333%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	color: #fff;
+	text-decoration: none;
+}
+
+.todo-opts__btn:first-child {
+	border-top-right-radius: 6px;
+	border-top-left-radius: 6px;
+}
+
+.todo-opts__btn:last-child {
+	border-bottom-right-radius: 6px;
+	border-bottom-left-radius: 6px;
+}
+
+.todo-opts__btn--green {
+	background-color: #28a745;
+}
+
+.todo-opts__btn--blue {
+	background-color: #007bff;
+}
+
+.todo-opts__btn--red {
+	background-color: #dc3545;
 }
 
 .todos {
-  margin-top: 24px;
+	margin-top: 24px;
 }
 
 .columns {
@@ -122,6 +194,20 @@ body {
 	padding: .75rem;
 }
 
+.column__title {
+	font-family: 'Montserrat', sans-serif;
+}
+
+.column__container {
+	min-height: 70px;
+}
+
 .is-one-third {
 	width: 33.3333%;
+}
+
+@media screen and (max-width: 550px) {
+	.is-one-third {
+		width: 100%;
+	}
 }

@@ -3,10 +3,18 @@
      * Helpers
      */
     var Helpers = {
+        priorities: {
+        	'00': 'low',
+        	'11': 'default',
+        	'22': 'urgent'
+        },
         generateId: function() {
             return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, function(c) {
                 return (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16);
             });
+        },
+        priorityToHumans: function(priority) {
+        	return this.priorities[priority] || 'default';
         }
     };
 
@@ -35,14 +43,14 @@
          */
         function handleRemoveTodo(e) {
             e.preventDefault();
-            var todo = e.target.parentNode;
+            var todo = e.target.parentNode.parentNode;
             var id = todo.getAttribute('data-js-id');
 
             if (App.remove(id)) {
                 $todoElements = $todoElements.filter(function(todo) {
                     return todo.getAttribute('data-js-id') !== id;
                 });
-                $todosContainer.removeChild(todo);
+                todo.parentNode.removeChild(todo);
             }
         }
 
@@ -76,14 +84,17 @@
          * Initialize UI
          */
         function init() {
-            $todosContainer = $('#todo');
-            $doingContainer = $('#doing');
-            $doneContainer = $('#done');
+            $todosContainer = $('#todo .column__container');
+            $doingContainer = $('#doing .column__container');
+            $doneContainer = $('#done .column__container');
             $btnAddNew = $('[data-js-action="addNewTodo"]');
             $inputTitle = $('[data-js-id="title"]');
             $inputDescription = $('[data-js-id="description"]');
             $inputPriority = $('[data-js-id="priority"]');
             $btnAddNew.addEventListener('click', handleNewTodo);
+
+            /** Init dragula drag 'n drop functionality */
+    		dragula([$todosContainer, $doingContainer, $doneContainer]);
         }
 
         /**
@@ -92,7 +103,8 @@
          * @param {*} title
          * @param {*} description
          */
-        function render(id, title, description) {
+        function render(data) {
+        	var { id, title, description, priority } = data;
             var template = `
             <div class="todo-cb">
                 <input type="checkbox" class="todo-cb__input" name="done" data-js-action="done" value="11">
@@ -101,17 +113,20 @@
                 <h2 class="todo-info__title">${title}</h2>
                 <p class="todo-info__desc">${description}</p>
             </div>
-            <h2></h2>
-            <p></p>
-            <a href="#" data-js-action="remove">Remover</a>
+            <div class="todo-opts">
+				<a href="#" class="todo-opts__btn todo-opts__btn--green" data-js-action="mark">D</a>
+				<a href="#" class="todo-opts__btn todo-opts__btn--blue" data-js-action="edit">E</a>
+				<a href="#" class="todo-opts__btn todo-opts__btn--red" data-js-action="remove">R</a>
+            </div>
         `;
             var fragment = document.createDocumentFragment();
             var wrapper = document.createElement('div');
             wrapper.classList.add('todo');
+            wrapper.classList.add('todo--' + Helpers.priorityToHumans(priority));
             wrapper.setAttribute('data-js-id', id);
             wrapper.innerHTML = template;
             fragment.appendChild(wrapper)
-            $todosContainer.firstElementChild.after(fragment);
+            $todosContainer.insertBefore(fragment, null);
 
             /**
              * Events
@@ -129,8 +144,8 @@
          * @param {*} id
          * @param {*} data
          */
-        function addToList(id, data) {
-            var todo = render(id, data.title, data.description);
+        function addToList(data) {
+            var todo = render(data);
             $todoElements.unshift(todo);
         }
 
@@ -179,10 +194,11 @@
                 id: id,
                 title: data.title,
                 description: data.description,
-                status: 00
+                priority: data.priority,
+                status: '00'
             };
             todos[id] = todo;
-            UI.addToList(id, todo);
+            UI.addToList(todo);
         }
 
         /**
@@ -250,12 +266,14 @@
     /**
      * Hardcoding some initial data
      */
-    // App.add({
-    //   title: 'Lorem Ipsum',
-    //   description: 'Lorem ipsum dolor dictum sociosqu aenea.'
-    // });
-    // App.add({
-    //   title: 'Vehicula varius blandit',
-    //   description: 'Pretium porttitor turpis sit nulla mi erat mattis lorem.'
-    // });
+    App.add({
+      title: 'Lorem Ipsum',
+      description: 'Lorem ipsum dolor dictum sociosqu aenea.',
+      priority: '22'
+    });
+    App.add({
+      title: 'Vehicula varius blandit',
+      description: 'Pretium porttitor turpis sit nulla mi erat mattis lorem.',
+      priority: '11'
+    });
 })(document, window);
