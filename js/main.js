@@ -54,19 +54,6 @@
             }
         }
 
-        function handleDoneTodo(e) {
-            var $checkbox = e.target;
-            var id = $checkbox.parentNode.parentNode.getAttribute('data-js-id');
-
-            if ($checkbox.checked) {
-                $checkbox.parentNode.parentNode.classList.add('todo--done');
-                App.mark(id, '11');
-            } else {
-                $checkbox.parentNode.parentNode.classList.remove('todo--done');
-                App.mark(id, '00');
-            }
-        }
-
         /**
          * Easy-to-use dom selector
          * @param {*} selector
@@ -114,9 +101,8 @@
                 <p class="todo-info__desc">${description}</p>
             </div>
             <div class="todo-opts">
-				<a href="#" class="todo-opts__btn todo-opts__btn--green" data-js-action="mark">D</a>
-				<a href="#" class="todo-opts__btn todo-opts__btn--blue" data-js-action="edit">E</a>
-				<a href="#" class="todo-opts__btn todo-opts__btn--red" data-js-action="remove">R</a>
+				<a href="#" class="todo-opts__btn todo-opts__btn--green" data-js-action="edit"><i class="material-icons">create</i></a>
+				<a href="#" class="todo-opts__btn todo-opts__btn--red" data-js-action="remove"><i class="material-icons">clear</i></a>
             </div>
         `;
             var fragment = document.createDocumentFragment();
@@ -133,9 +119,7 @@
              */
             var todo = $('.todo[data-js-id="' + id + '"]');
             var $btnRemove = todo.querySelector('[data-js-action="remove"]');
-            var $checkbox = todo.querySelector('[data-js-action="done"]');
             $btnRemove.addEventListener('click', handleRemoveTodo);
-            $checkbox.addEventListener('change', handleDoneTodo);
             return wrapper;
         }
 
@@ -231,6 +215,7 @@
                 return false;
             }
             todos[id].status = status;
+            return true;
         }
 
         /**
