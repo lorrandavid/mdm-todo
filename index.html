@@ -14,14 +14,18 @@
     <div class="page" id="app">
         <div class="container">
         	<div class="header">
-				<!-- Title -->
-				<a href="#" data-js-id="toggle">Toggle</a>
+				<h1>Todo</h1>
         	</div>
 
         	<div class="columns">
         		<div class="column is-one-third" id="todo">
 	        		<h3 class="column__title">Todo</h3>
-	        		<div class="column__container"></div>
+					<a href="#" data-js-id="toggle" class="todo-add">
+						<div class="todo-add__wrapper">
+							Add a task <i class="material-icons">add</i>
+						</div>
+					</a>
+					<div class="column__container"></div>
 	        	</div>
 
 	        	<div class="column is-one-third" id="doing">

@@ -79,6 +79,14 @@
             $sidebar.classList.toggle('sidebar--open');
         }
 
+
+        function handleAppClick(e) {
+            e.preventDefault();
+            if(e.target.classList.contains('locked')) {
+                toggleSidebar();
+            }
+        }
+
         /**
          * Handle toggle sidebar event
          * @param {*} e
@@ -128,11 +136,19 @@
             $inputPriority = $('[data-js-id="priority"]');
             $btnToggle = $('[data-js-id="toggle"]');
             $sidebar = $('.sidebar');
-            $btnAddNew.addEventListener('click', handleNewTodo);
-            $btnToggle.forEach( ($btn) => { $btn.addEventListener( 'click', handleToggleSidebar ); } );
 
             /** Init dragula drag 'n drop functionality */
     		dragula([$todosContainer, $doingContainer, $doneContainer]);
+            initEvents();
+        }
+
+        /**
+         * Initialize events
+         */
+        function initEvents() {
+            $body.addEventListener('click', handleAppClick);
+            $btnAddNew.addEventListener('click', handleNewTodo);
+            $btnToggle.forEach(($btn) => {$btn.addEventListener('click', handleToggleSidebar);});
         }
 
         /**
