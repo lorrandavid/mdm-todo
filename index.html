@@ -14,14 +14,8 @@
     <div class="page" id="app">
         <div class="container">
         	<div class="header">
-        		<input type="text" data-js-id="title">
-                <input type="text" data-js-id="description">
-                <select name="priority" data-js-id="priority">
-                	<option value="11" selected>Default</option>
-                	<option value="22">Urgent</option>
-                	<option value="00">Low</option>
-                </select>
-                <a href="#" data-js-action="addNewTodo">Adicionar</a>
+				<!-- Title -->
+				<a href="#" data-js-id="toggle">Toggle</a>
         	</div>
 
         	<div class="columns">
@@ -40,7 +34,43 @@
 	        		<div class="column__container"></div>
 	            </div>
         	</div>
-        </div>
+		</div>
+
+		<div class="sidebar">
+			<div class="sidebar-inner">
+				<h2 class="sidebar-inner__title">Add todo</h2>
+				<a href="#" class="sidebar-inner__close" data-js-id="toggle"><i class="material-icons">close</i></a>
+
+				<form class="form" data-js-id="formAddNew">
+					<div class="form-group">
+						<input type="text" id="title" data-js-id="title" class="material-field" required>
+						<label for="title" class="material-field__label">Title</label>
+						<span class="material-field__bar"></span>
+					</div>
+
+					<div class="form-group">
+						<textarea name="" id="description" cols="30" rows="3" data-js-id="description" class="material-field material-field--textarea" required></textarea>
+						<label for="description" class="material-field__label">Description</label>
+						<span class="material-field__bar"></span>
+					</div>
+
+					<div class="form-group">
+						<select name="" id="priority" data-js-id="priority" class="material-field material-field--select" required>
+							<option value="" disabled selected></option>
+							<option value="11">Default</option>
+							<option value="22">Urgent</option>
+							<option value="00">Low</option>
+						</select>
+						<label for="priority" class="material-field__label">Priority</label>
+						<span class="material-field__bar"></span>
+					</div>
+
+					<div class="form-group text-right">
+						<a href="#" data-js-action="addNewTodo" class="material-field__btn">Adicionar</a>
+					</div>
+				</form>
+			</div>
+		</div>
     </div>
 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.2/dragula.min.js"></script>

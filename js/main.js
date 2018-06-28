@@ -29,6 +29,66 @@
         var $inputDescription;
 
         /**
+         * Easy-to-use dom selector
+         * @param {*} selector
+         */
+        function $(selector) {
+            var $elems = document.querySelectorAll(selector);
+
+            if ($elems.length > 1) {
+                return $elems;
+            }
+            return $elems[0];
+        };
+
+        /**
+         * Easy-to-use closest selector
+         * Pollyfill made by https://stackoverflow.com/users/1022648/ales
+         * @param {*} el
+         * @param {*} selector
+         */
+        function closest(el, selector) {
+            var matchesFn;
+
+            ['matches','webkitMatchesSelector','mozMatchesSelector','msMatchesSelector','oMatchesSelector'].some(function(fn) {
+                if (typeof document.body[fn] == 'function') {
+                    matchesFn = fn;
+                    return true;
+                }
+                return false;
+            })
+
+            var parent;
+
+            while (el) {
+                parent = el.parentElement;
+                if (parent && parent[matchesFn](selector)) {
+                    return parent;
+                }
+                el = parent;
+            }
+
+            return null;
+        }
+
+        /**
+         * Toggle sidebar
+         */
+        function toggleSidebar() {
+            $body.classList.toggle('locked');
+            $sidebar.classList.toggle('sidebar--open');
+        }
+
+        /**
+         * Handle toggle sidebar event
+         * @param {*} e
+         */
+        function handleToggleSidebar(e) {
+            e.preventDefault();
+            toggleSidebar();
+        }
+
+        /**
          * Handle form event
          * @param {*} e
          */
@@ -43,7 +103,7 @@
          */
         function handleRemoveTodo(e) {
             e.preventDefault();
-            var todo = e.target.parentNode.parentNode;
+            var todo = closest(e.target, '.todo');
             var id = todo.getAttribute('data-js-id');
 
             if (App.remove(id)) {
@@ -55,22 +115,10 @@
         }
 
         /**
-         * Easy-to-use dom selector
-         * @param {*} selector
-         */
-        function $(selector) {
-            var $elems = document.querySelectorAll(selector);
-
-            if ($elems.length > 1) {
-                return $elems;
-            }
-            return $elems[0];
-        };
-
-        /**
          * Initialize UI
          */
         function init() {
+            $body = $('body');
             $todosContainer = $('#todo .column__container');
             $doingContainer = $('#doing .column__container');
             $doneContainer = $('#done .column__container');
@@ -78,7 +126,10 @@
             $inputTitle = $('[data-js-id="title"]');
             $inputDescription = $('[data-js-id="description"]');
             $inputPriority = $('[data-js-id="priority"]');
+            $btnToggle = $('[data-js-id="toggle"]');
+            $sidebar = $('.sidebar');
             $btnAddNew.addEventListener('click', handleNewTodo);
+            $btnToggle.forEach( ($btn) => { $btn.addEventListener( 'click', handleToggleSidebar ); } );
 
             /** Init dragula drag 'n drop functionality */
     		dragula([$todosContainer, $doingContainer, $doneContainer]);
@@ -112,7 +163,7 @@
             wrapper.setAttribute('data-js-id', id);
             wrapper.innerHTML = template;
             fragment.appendChild(wrapper)
-            $todosContainer.insertBefore(fragment, null);
+            $todosContainer.insertBefore(fragment, $todosContainer.firstChild);
 
             /**
              * Events
@@ -131,17 +182,18 @@
         function addToList(data) {
             var todo = render(data);
             $todoElements.unshift(todo);
+            toggleSidebar();
         }
 
         /**
          * Get form data
          */
         function getFormData() {
+            var $formAddNew = $('[data-js-id="formAddNew"]');
             var title = $inputTitle.value;
             var description = $inputDescription.value;
             var priority = $inputPriority.value;
-            $inputTitle.value = '';
-            $inputDescription.value = '';
+            $formAddNew.reset();
 
             return {
                 title,
