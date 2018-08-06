@@ -1,4 +1,6 @@
 (function(document, global) {
+    'use strict';
+
     /**
      * Helpers
      */
@@ -23,7 +25,13 @@
      */
     function createUI() {
         var $todoElements = [];
+        var $body;
         var $todosContainer;
+        var $doingContainer;
+        var $doneContainer;
+        var $inputPriority;
+        var $btnToggle;
+        var $sidebar;
         var $btnAddNew;
         var $inputTitle;
         var $inputDescription;
@@ -186,6 +194,7 @@
              */
             var todo = $('.todo[data-js-id="' + id + '"]');
             var $btnRemove = todo.querySelector('[data-js-action="remove"]');
+            var $btnEdit = todo.querySelector('[data-js-action="edit"]');
             $btnRemove.addEventListener('click', handleRemoveTodo);
             return wrapper;
         }
